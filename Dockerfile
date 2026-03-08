@@ -1,24 +1,23 @@
-FROM node:20-slim
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
-# 1. Use a standard Node image (avoid 'alpine' as it lacks tools)
+# 1. Use the full Node.js 20 image to ensure all build tools are available
 FROM node:20
 
-# 2. Set the working directory
+# 2. Set the working directory inside the container
 WORKDIR /app
 
-# 3. INSTALL GIT (This fixes the ENOENT error)
+# 3. FIX: Install Git (Required to download specific movie scraper libraries)
 RUN apt-get update && apt-get install -y git
 
-# 4. Copy package files and install
+# 4. Copy package files first to take advantage of Docker caching
 COPY package*.json ./
+
+# 5. Install dependencies (This will now succeed thanks to Git)
 RUN npm install
 
-# 5. Copy the rest of your code
+# 6. Copy the rest of your application code
+COPY . .
 
-# 6. Start the app
+# 7. Tell Railway which port the container uses
 EXPOSE 3000
+
+# 8. Start the application
 CMD ["npm", "start"]
-# Notice: NO "ENV REDIS_URL=..." here!
