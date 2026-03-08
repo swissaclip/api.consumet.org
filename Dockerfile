@@ -22,9 +22,6 @@ ARG PORT=3000
 # to be able to run tests (for example in CI), do not set production as environment
 ENV NODE_ENV=${NODE_ENV}
 ENV PORT=${PORT}
-ENV REDISHOST=${REDIS_HOST}
-ENV REDISPORT=${REDIS_PORT}
-ENV REDISPASSWORD=${REDIS_PASSWORD}
 
 ENV NPM_CONFIG_LOGLEVEL=warn
 
